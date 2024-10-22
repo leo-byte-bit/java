@@ -1,0 +1,89 @@
+import java.util.Scanner;
+
+public class KeyShoppe {
+    public static void main(String[] args) {
+        int num_keychains = 0;
+        double sales_tax = 1.0825;
+        int base_shipping = 5;
+        double per_keychain_shipping = 1;
+        int price_per_keychain = 10;
+        Scanner scanner;
+        String value;
+
+        System.out.println("---- Welcome to the Keychain Shop! ----");
+
+        //menu
+        while (1 == 1) { //to capture user input in an endless loop
+            System.out.println("Choose an option: ");
+            System.out.println("1. Add Keychains to Order");
+            System.out.println("2. Remove Keychains from Order");
+            System.out.println("3. View Current Order");
+            System.out.println("4. Checkout");
+            scanner = new Scanner(System.in);
+            value = scanner.nextLine();
+
+            if (value.equals("1")) { //Add Keychains to Order
+                num_keychains = add_keychains(num_keychains);
+            } else if (value.equals("2")) { //Remove Keychains from Order
+                num_keychains = remove_keychains(num_keychains);
+            } else if (value.equals("3")) { //View Current Order
+                view_order(num_keychains);
+            } else if (value.equals("4")) { //Checkout
+                checkout(num_keychains, price_per_keychain, base_shipping, sales_tax);
+                break;
+            }
+
+        }
+    }
+
+    //user can add keychains to the "cart"
+    public static int add_keychains(int current_keychains) {
+        Scanner scanner;
+        int value;
+        int total;
+        System.out.println("Enter number of keychains: ");
+        scanner = new Scanner(System.in);
+        value = scanner.nextInt();
+        total = value + current_keychains;
+        return total;
+
+    }
+
+    //user can remove keychains from the "cart"
+    public static int remove_keychains(int current_keychains) {
+        Scanner scanner;
+        int value;
+        int total;
+        System.out.println("Enter number of keychains you want to delete: ");
+        scanner = new Scanner(System.in);
+        value = scanner.nextInt();
+        total = current_keychains - value;
+        return total;
+    }
+
+    //user can see their order
+    public static void view_order(int current_keychains) {
+        System.out.println("You total number of keychains is: " + Math.abs(current_keychains));
+    }
+
+    //user can now check out
+    public static void checkout(int num_keychains, double price_per_keychain, int base_shipping, double sales_tax) {
+        if (num_keychains <= 0) {
+            System.out.println("Add keychains before checking out!!!");
+            return;
+        }
+        //if user tried checking out zero keychains
+        //if user entered normal amount of keychains
+        String value;
+        Scanner scanner;
+        int capitalism;
+        System.out.println("--- Enter your full name: ");
+        scanner = new Scanner(System.in);
+        value = scanner.nextLine();
+        System.out.println("--- Your name: " + value);
+        System.out.println(" --- Shipping is $5 and every keychain is an extra $1 --- ");
+        capitalism = num_keychains * 1; //this is the extra keychain shipping cost, which is insane, hence me being funny
+        System.out.println("--- The total cost is: $" + ((num_keychains * price_per_keychain) + base_shipping + capitalism) * sales_tax);
+        System.out.println("--- Thank you for shopping! We hope to see you soon! --- ");
+    }
+}
