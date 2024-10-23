@@ -1,0 +1,60 @@
+import java.util.Scanner;
+
+public class studentID {
+    public static class Student {
+        int studentID;
+        String name;
+        double grade;
+
+        Student(int a, String b, double c) {
+            studentID = a; //this = used to specify a class variable
+            name = b;
+            grade = c;
+        }
+    }
+
+    //establishes arrays and calls something from array
+    public static void main(String[] args) {
+        //arrays defined
+        Student[] students = new Student[5];
+        Student mitchell = new Student(123456, "Mitchell", 99.5);
+        Student ortiz = new Student(813225, "Ortiz", 78.5);
+        Student Luu = new Student(823669, "Luu", 95.6);
+        Student Zimmerman = new Student(307760, "Zimmerman", 96.8);
+        Student Brooks = new Student(827131, "Brooks", 82.7);
+
+        //added students objects to the array
+        students[0] = mitchell;
+        students[1] = ortiz;
+        students[2] = Luu;
+        students[3] = Zimmerman;
+        students[4] = Brooks;
+
+        int value = 0;
+        boolean correctID;
+
+        while (true) {
+            //ask for ID number from user
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter an ID number: ");
+            try {
+                value = scanner.nextInt();
+                correctID = true;
+            } catch (Exception e) {
+                System.out.println("Student ID incorrect, try again.");
+                correctID = false;
+            }
+            if (correctID) {
+                for (int i = 0; i < students.length; i++) {
+                    if (students[i].studentID == value) {
+                        System.out.println("Student Name: " + students[i].name);
+                        System.out.println("Student's Grade: " + students[i].grade);
+                        break;
+                    }
+                }
+            }
+
+                }
+            }
+
+        }
