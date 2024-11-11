@@ -1,0 +1,226 @@
+import java.util.Scanner;
+
+public class LibraryManagementSystem {
+
+    //establishes arrays and calls something from array
+    public static void main(String[] args) {
+        //arrays defined
+        Book[] books = new Book[50];
+        int[] borrows = {
+                23, 45, 12, 67, 89, 34, 56, 78, 15, 90,
+                42, 11, 67, 24, 53, 88, 91, 33, 19, 76,
+                28, 64, 40, 52, 85, 29, 70, 13, 99, 44,
+                37, 55, 82, 63, 17, 21, 66, 38, 74, 31,
+                92, 57, 49, 60, 26, 73, 80, 10, 47, 59
+        };
+
+        //print heading
+        System.out.println("Welcome to the Library Management System!");
+
+        int option = 0;
+        boolean correctEntry;
+        float weight = 1;
+        while (true) {
+            System.out.println("===========================================================================");
+            System.out.println("Enter Option: ");
+            System.out.println("1. Add Book");
+            System.out.println("2. Display Books");
+            System.out.println("3. Calculate Average Year of Publication ");
+            System.out.println("4. Display Book Ages");
+            System.out.println("5. Number of Times Books Borrowed");
+            System.out.println("6. Weighted Average Borrows of All Books");
+            System.out.println("7. Data Type Conversions");
+            System.out.println("8. Exit");
+
+
+            Scanner scanner = new Scanner(System.in);
+            try {
+                option = scanner.nextInt();
+                correctEntry = true;
+            } catch (Exception e) {
+                System.out.println("Invalid Entry, Try Again :(");
+                correctEntry = false;
+            }
+            if (correctEntry) {
+                if (option == 1) {
+                    books = addBook(books);
+
+                } else if (option == 2) {
+                    displayBooks(books);
+                } else if (option == 3) {
+                    calculateAverageYear(books);
+                } else if (option == 4) {
+                    calculateBookAge(books);
+                } else if (option == 5) {
+                    displayBooksWithBorrows(books, borrows);
+                } else if (option == 6) {
+                    calculateWeightedAverageBorrows(books, weight, borrows);
+                } else if (option == 7) {
+                    convertDataTypes(books, borrows);
+                } else if (option == 8) {
+                    System.out.println("Thank you for using the Library Management System!");
+                    break;
+                }
+            }
+        }
+    } // end of main
+
+    public static Book[] addBook(Book[] books) {
+        System.out.println("Enter book title: ");
+        Scanner scanner = new Scanner(System.in);
+        String title = scanner.nextLine();
+
+        System.out.println("Enter author's name: ");
+        scanner = new Scanner(System.in);
+        String author = scanner.nextLine();
+
+        int publicationDate = 0;
+        boolean validYear = false;
+
+        while (!validYear) {
+            System.out.println("Enter publication year (numeric value): ");
+
+            try {
+                publicationDate = Integer.parseInt(scanner.nextLine());  // Try to parse the year as an integer
+                validYear = true;  // If successful, exit the loop
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid number for the publication year.");
+            }
+        }
+
+        Book book = new Book(title, author, publicationDate);
+        System.out.println("--- Display Book Data ---");
+        System.out.println("Title: " + book.title);
+        System.out.println("Author: " + book.author);
+        System.out.println("Year Published: " + book.publicationDate);
+        System.out.println("-------------------------");
+
+
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] == null) {
+                books[i] = book;
+                break;
+            }
+        }
+
+        return books;
+    }
+
+    public static void displayBooks(Book[] books) {
+        System.out.println("The library consists of: ");
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null) {
+                System.out.println(i + "-" + books[i].title + "," + books[i].author + "," + books[i].publicationDate);
+            } else {
+                System.out.println(i + "----nothing :( ");
+            }
+        }
+    }
+
+    public static void displayBooksWithBorrows(Book[] books, int[] borrows) {
+        System.out.println("List of Books with Borrow Counts: ");
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null) {
+                System.out.println(i + "-" + books[i].title + "," + books[i].author + "," + books[i].publicationDate + "," + borrows[i] + " borrows");
+            }
+        }
+    }
+
+    public static void calculateAverageYear(Book[] books) {
+        int sum = 0;
+        int count = 0;
+
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null) {
+                sum += books[i].publicationDate;
+                count++;
+            }
+        }
+        if (count > 0) {
+            double average = (double) sum / count;
+            System.out.println("The average publication year of all the books is: " + average);
+        } else {
+            System.out.println("No books in here yet!");
+        }
+    }
+
+    public static void calculateBookAge(Book[] books) {
+        int currentYear = 2024;
+        boolean hasBooks = false;
+
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null) {
+                int age = (currentYear - books[i].publicationDate);
+                System.out.println("Age of " + books[i].title + " is " + age + " years.");
+                hasBooks = true;
+            }
+        }
+        if (!hasBooks) {
+            System.out.println("No books yet!");
+        }
+    }
+
+    public static void calculateWeightedAverageBorrows(Book[] books, float weight, int[] borrows) {
+        int totalBorrows = 0;
+        int bookCount = 0;
+
+        Scanner scanner;
+        System.out.println("Enter weight per book: ");
+        scanner = new Scanner(System.in);
+        double userDefinedWeight = scanner.nextDouble();
+
+        // Sum up the borrow counts of all books
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null) {
+                totalBorrows += borrows[i];
+                bookCount++;
+            }
+        }
+
+        if (bookCount > 0) {
+            // Calculate the average borrows per book
+            double averageBorrows = (double) totalBorrows / bookCount;
+
+            // Apply the user-provided weight to the average borrows
+            double weightedAverage = averageBorrows * userDefinedWeight;
+
+            System.out.println("Weighted Average Borrows is: " + weightedAverage);
+        } else {
+            System.out.println("No books yet!");
+        }
+    }
+
+    public static void convertDataTypes(Book[] books, int[] borrows) {
+        String publicationYearS;
+        double publicationYearD;
+        String borrowCountF;
+        boolean hasBooks = false;
+
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null) {
+                System.out.println("Data Type Conversion: ");
+                publicationYearS = String.valueOf(books[i].publicationDate);
+                publicationYearD = Double.valueOf(books[i].publicationDate);
+                borrowCountF = String.valueOf(borrows[i]);
+                System.out.println("Publication year of " + books[i].title + " as a string: " + publicationYearS + "\nIt's publication year as a double: " + publicationYearD + "\nAnd its borrow count as a string: " + borrowCountF + "\n==================================");
+                hasBooks = true;
+            }
+        }
+        if (!hasBooks) {
+            System.out.println("No books yet!");
+
+        }
+    }
+
+    public static class Book {
+        String title;
+        String author;
+        int publicationDate;
+
+        Book(String title, String author, int publicationDate) { //defined class called book and defined what's in it (constructed a book)
+            this.title = title; //this = used to specify a class variable
+            this.author = author;
+            this.publicationDate = publicationDate;
+        }
+    }
+}
